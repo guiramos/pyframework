@@ -1,0 +1,27 @@
+[build-system]
+requires = [ "poetry-core",]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pyframework"
+version = "0.0.1"
+description = "Python Framework"
+authors = [ "Guilherme Ramos <guiramos@nuuuh.com>",]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+pydantic = "^2.6.4"
+pyyaml = "^6.0"
+beautifulsoup4 = "^4.12.3"
+numpy ="^1.26.4"
+requests = "^2.32.3"
+pytz = "^2024.1"
+pillow = "^10.3.0"
+regex = "^2024.5.15"
+ipython = "^8.26.0"
+
+[[tool.poetry.packages]]
+include = "pyframework"
+
+
