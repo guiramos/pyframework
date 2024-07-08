@@ -12,7 +12,7 @@ rolling_file_handler = RotatingFileHandler(app_log_file, maxBytes=log_max_size, 
 rolling_file_handler.setFormatter(log_formatter)
 
 
-uvcorn_logging_config = {
+uvicorn_logging_config = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
