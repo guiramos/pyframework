@@ -16,7 +16,6 @@ from IPython.display import Markdown
 
 UNAUTHORIZED_MESSAGE = "Unauthorized: Invalid client token."
 BAD_REQUEST_MESSAGE = "Bad Request: 'ticker' and 'operation' must be present in the request body."
-HELLO_WORLD_MESSAGE = "Hello, world!"
 
 
 def convert_time_to_datetime(time_in_milliseconds, timezone_str):
