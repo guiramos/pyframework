@@ -1,3 +1,4 @@
+import base64
 import datetime
 import os
 import traceback
@@ -16,14 +17,33 @@ class InvalidTokenException(Exception):
         super().__init__(self.message)
 
 
+def add_padding(token: str) -> str:
+    """Add padding to a JWT token if necessary."""
+    # Base64 encoding requires padding to be divisible by 4
+    padding_needed = len(token) % 4
+    if padding_needed:
+        token += '=' * (4 - padding_needed)
+    return token
+
+
 def decode_google_id_token(token):
     try:
-        return id_token.verify_oauth2_token(token, requests.Request(), os.getenv("GOOGLE_CLIENT_ID"))
+        # Add padding to token before decoding
+        padded_token = add_padding(token)
+        client_ids = os.getenv("GOOGLE_CLIENT_ID").split(',')
+
+        for client_id in client_ids:
+            try:
+                return id_token.verify_oauth2_token(padded_token, requests.Request(), client_id)
+            except ValueError:
+                continue
+
+        # If none of the client IDs work, raise an exception
+        raise InvalidTokenException("Invalid Google token")
     except ValueError as e:
         traceback.print_exc()
         # Invalid token
         raise InvalidTokenException("Invalid Google token") from e
-
 
 class JwtUtil:
     def __init__(self, secret_string: str):
