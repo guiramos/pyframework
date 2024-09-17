@@ -1,20 +1,33 @@
-import base64
 import datetime
+import logging
 import os
 import traceback
 
-
 import jwt
 from google.oauth2 import id_token
+
+from pyframework.logging import rolling_file_handler, console_handler
+
 from google.auth.transport import requests
 
 JWT_ALGO = "HS256"
+
+logger = logging.getLogger('jwt_util')
+logger.setLevel(logging.DEBUG)
+
+logger.addHandler(rolling_file_handler)
+logger.addHandler(console_handler)
 
 
 class InvalidTokenException(Exception):
     def __init__(self, message="Invalid token"):
         self.message = message
         super().__init__(self.message)
+
+
+def fix_padding(base64_string):
+    # Add padding if necessary (Base64 requires '=' padding)
+    return base64_string + '=' * (-len(base64_string) % 4)
 
 
 def add_padding(token: str) -> str:
@@ -41,7 +54,7 @@ def decode_google_id_token(token):
         # If none of the client IDs work, raise an exception
         raise InvalidTokenException("Invalid Google token")
     except ValueError as e:
-        traceback.print_exc()
+        logger.error("Invalid Google token", exc_info=True)
         # Invalid token
         raise InvalidTokenException("Invalid Google token") from e
 
