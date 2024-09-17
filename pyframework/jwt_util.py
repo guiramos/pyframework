@@ -42,13 +42,14 @@ def add_padding(token: str) -> str:
 def decode_google_id_token(token):
     try:
         # Add padding to token before decoding
-        padded_token = add_padding(token)
+        # token = add_padding(token)
         client_ids = os.getenv("GOOGLE_CLIENT_ID").split(',')
 
         for client_id in client_ids:
             try:
-                return id_token.verify_oauth2_token(padded_token, requests.Request(), client_id)
+                return id_token.verify_oauth2_token(token, requests.Request(), client_id)
             except ValueError:
+                traceback.print_exc()
                 continue
 
         # If none of the client IDs work, raise an exception

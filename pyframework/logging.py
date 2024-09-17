@@ -5,8 +5,11 @@ import logging
 
 APP_NAME = os.getenv('APP_NAME', "app")
 
-log_format = '%(asctime)s - %(name)-27s - %(message)s'
+log_format = '%(asctime)s - %(name)-15s - %(message)s'
 log_formatter = logging.Formatter(log_format)
+
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(log_formatter)
 
 
 def get_default_log_dir():
@@ -23,7 +26,6 @@ def get_default_log_dir():
 
 log_dir = os.getenv('LOG_PATH', get_default_log_dir())
 log_path = os.path.join(log_dir, 'logs', 'app.log')
-
 
 # logging.basicConfig(level=logging.INFO, format=log_format)
 log_max_size = 10 * 1024 * 1024  # 10 MB
