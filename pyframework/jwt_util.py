@@ -61,11 +61,16 @@ def decode_google_id_token(token):
 
 class JwtUtil:
     def __init__(self, secret_string: str):
-        self.secret_key = secret_string.encode('utf-8')
+        self.secret_key = secret_string
 
     def decode_jwt_token(self, token: str) -> dict:
         try:
-            payload = jwt.decode(token, self.secret_key, algorithms=[JWT_ALGO])
+            payload = jwt.decode(
+                token,
+                self.secret_key,
+                algorithms=[JWT_ALGO],
+                options={"verify_aud": False}
+            )
 
             # Check if the "exp" field is present and not expired
             if "exp" in payload:
