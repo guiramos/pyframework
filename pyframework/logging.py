@@ -112,7 +112,7 @@ class PayloadMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
 
         response_body = [chunk async for chunk in response.body_iterator]
-        response.body_iterator = iter(response_body)
+        response.body_iterator = self._aiter(response_body)
 
         response_text = b''.join(response_body).decode('utf-8')
         try:
@@ -122,3 +122,7 @@ class PayloadMiddleware(BaseHTTPMiddleware):
             self.logger.info(f"response: {response.status_code} {response_text}")
 
         return response
+
+    async def _aiter(self, iterable):
+        for item in iterable:
+            yield item
