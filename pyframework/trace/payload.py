@@ -5,6 +5,8 @@ import os
 from logging.handlers import RotatingFileHandler
 from starlette.types import ASGIApp, Receive, Scope, Send
 from .filter import TraceIdFilter
+from ..logging import log_dir
+
 
 class PayloadMiddleware:
     def __init__(self, app: ASGIApp):
@@ -12,7 +14,7 @@ class PayloadMiddleware:
         self.logger = logging.getLogger('payload_logger')
         self.logger.setLevel(logging.INFO)
         handler = RotatingFileHandler(
-            os.path.join('logs', 'request_response.log'),
+            os.path.join(log_dir, 'logs', 'request_response.log'),
             maxBytes=10 * 1024 * 1024,  # 10 MB
             backupCount=10
         )
