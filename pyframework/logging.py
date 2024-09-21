@@ -4,6 +4,8 @@ import platform
 from logging.handlers import RotatingFileHandler
 import logging
 
+from pyframework.trace import trace_id_format
+
 APP_NAME = os.getenv('APP_NAME', "app")
 
 log_format = '%(asctime)s - %(name)-15s - %(message)s'
@@ -45,7 +47,7 @@ uvicorn_logging_config = {
     },
     "formatters": {
         "default": {
-            "format": "%(asctime)s - %(levelname)6s - [%(trace_id)s] - %(message)s"
+            "format": trace_id_format
         },
     },
     "handlers": {
