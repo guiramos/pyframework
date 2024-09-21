@@ -1,2 +1,2 @@
 
-trace_id_format = '%(asctime)s - %(levelname)s - [%(trace_id)s] - %(name)s - %(message)s'
+trace_id_format = '%(asctime)s - %(levelname)-6s %(trace_id)s - %(name)s - %(message)s'

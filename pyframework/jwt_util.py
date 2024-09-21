@@ -6,7 +6,7 @@ import traceback
 import jwt
 from google.oauth2 import id_token
 
-from pyframework.logging import rolling_file_handler, console_handler
+from pyframework.logging import app_log_file_rolling_file_handler, app_console_handler
 
 from google.auth.transport import requests
 
@@ -15,8 +15,8 @@ JWT_ALGO = "HS256"
 logger = logging.getLogger('jwt_util')
 logger.setLevel(logging.DEBUG)
 
-logger.addHandler(rolling_file_handler)
-logger.addHandler(console_handler)
+logger.addHandler(app_log_file_rolling_file_handler)
+logger.addHandler(app_console_handler)
 
 
 class InvalidTokenException(Exception):

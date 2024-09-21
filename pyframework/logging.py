@@ -5,14 +5,14 @@ from logging.handlers import RotatingFileHandler
 import logging
 
 from pyframework.trace import trace_id_format
+from pyframework.trace.filter import TraceIdFilter
 
 APP_NAME = os.getenv('APP_NAME', "app")
 
-log_format = '%(asctime)s - %(name)-15s - %(message)s'
-log_formatter = logging.Formatter(log_format)
+log_formatter = logging.Formatter(trace_id_format)
 
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(log_formatter)
+app_console_handler = logging.StreamHandler()
+app_console_handler.setFormatter(log_formatter)
 
 
 def get_default_log_dir():
@@ -34,8 +34,13 @@ main_app_log_path = os.path.join(log_dir, 'logs', 'app.log')
 log_max_size = 10 * 1024 * 1024  # 10 MB
 log_backup_count = 5  # keep 5 backup logs
 app_log_file = main_app_log_path
-rolling_file_handler = RotatingFileHandler(app_log_file, maxBytes=log_max_size, backupCount=log_backup_count)
-rolling_file_handler.setFormatter(log_formatter)
+app_log_file_rolling_file_handler = RotatingFileHandler(app_log_file, maxBytes=log_max_size, backupCount=log_backup_count)
+app_log_file_rolling_file_handler.setFormatter(log_formatter)
+
+# Add the TraceIdFilter to include trace_id in log records
+app_log_file_rolling_file_handler.addFilter(TraceIdFilter())
+app_console_handler.addFilter(TraceIdFilter())
+
 
 uvicorn_logging_config = {
     "version": 1,
