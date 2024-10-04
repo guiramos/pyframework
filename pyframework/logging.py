@@ -61,6 +61,15 @@ uvicorn_logging_config = {
             "formatter": "default",
             "stream": "ext://sys.stdout",
         },
+        "file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "default",
+            "filename": app_log_file,
+            "maxBytes": log_max_size,
+            "backupCount": log_backup_count,
+            "encoding": "utf8",
+            "filters": ["trace_id_filter"],
+        },
     },
     "loggers": {
         "uvicorn": {
