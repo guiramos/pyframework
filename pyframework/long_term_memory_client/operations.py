@@ -31,7 +31,9 @@ def upsert_information(client,
         author,
         source="chat",
         url=None,
-        doc_type=None):
+        doc_type=None,
+        reference=None
+):
 
     document = {
         "text": text,
@@ -52,6 +54,9 @@ def upsert_information(client,
 
     if doc_type is not None:
         document["metadata"]["doc_type"] = doc_type
+
+    if reference is not None:
+        document["metadata"]["reference"] = reference
 
     upsert_payload = {"documents": [document]}
 

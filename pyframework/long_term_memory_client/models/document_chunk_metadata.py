@@ -27,6 +27,7 @@ class DocumentChunkMetadata:
     author: Union[Unset, str] = UNSET
     document_id: Union[Unset, str] = UNSET
     doc_type: Union[Unset, str] = UNSET
+    reference: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -40,6 +41,7 @@ class DocumentChunkMetadata:
         author = self.author
         document_id = self.document_id
         doc_type = self.doc_type
+        reference = self.reference
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,6 +60,8 @@ class DocumentChunkMetadata:
             field_dict["document_id"] = document_id
         if doc_type is not UNSET:
             field_dict["doc_type"] = doc_type
+        if reference is not UNSET:
+            field_dict["reference"] = reference
 
         return field_dict
 
@@ -83,6 +87,8 @@ class DocumentChunkMetadata:
 
         doc_type = d.pop("doc_type", UNSET)
 
+        reference = d.pop("reference", UNSET)
+
         document_chunk_metadata = cls(
             source=source,
             source_id=source_id,
@@ -91,6 +97,7 @@ class DocumentChunkMetadata:
             author=author,
             document_id=document_id,
             doc_type=doc_type,
+            reference=reference
         )
 
         document_chunk_metadata.additional_properties = d

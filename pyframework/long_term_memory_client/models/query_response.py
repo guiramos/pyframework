@@ -106,6 +106,7 @@ def create_json_payload_from_results(results: List[DocumentChunkWithScore]):
                 'created_at': document.metadata.created_at,
                 'source_id': document.metadata.source_id,
                 'doc_type': document.metadata.doc_type,
+                'reference': document.metadata.reference,
                 'score': document.score
             }
             payload.append(doc_dict)
