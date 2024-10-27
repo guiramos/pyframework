@@ -24,6 +24,7 @@ class DocumentMetadata:
     url: Union[Unset, str] = UNSET
     created_at: Union[Unset, str] = UNSET
     author: Union[Unset, str] = UNSET
+    doc_type: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -35,6 +36,7 @@ class DocumentMetadata:
         url = self.url
         created_at = self.created_at
         author = self.author
+        doc_type = self.doc_type
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,6 +51,8 @@ class DocumentMetadata:
             field_dict["created_at"] = created_at
         if author is not UNSET:
             field_dict["author"] = author
+        if doc_type is not UNSET:
+            field_dict["doc_type"] = doc_type
 
         return field_dict
 
@@ -70,12 +74,15 @@ class DocumentMetadata:
 
         author = d.pop("author", UNSET)
 
+        doc_type = d.pop("doc_type", UNSET)
+
         document_metadata = cls(
             source=source,
             source_id=source_id,
             url=url,
             created_at=created_at,
             author=author,
+            doc_type=doc_type
         )
 
         document_metadata.additional_properties = d
