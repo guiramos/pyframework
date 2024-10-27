@@ -105,6 +105,7 @@ def create_json_payload_from_results(results: List[DocumentChunkWithScore]):
                 'text': document.text,
                 'created_at': document.metadata.created_at,
                 'source_id': document.metadata.source_id,
+                'doc_type': document.metadata.doc_type,
                 'score': document.score
             }
             payload.append(doc_dict)
@@ -121,8 +122,8 @@ def get_top_results_above_threshold(query_response: QueryResponse, threshold: fl
     filtered_results = [result for result in combined_results if result.score > threshold]
 
     # Sort the filtered results by score (in descending order)
-    # sorted_results = sorted(filtered_results, key=lambda result: result.score, reverse=True)
-    sorted_results = sorted(filtered_results, key=lambda result: result.id)
+    sorted_results = sorted(filtered_results, key=lambda result: result.score, reverse=True)
+    # sorted_results = sorted(filtered_results, key=lambda result: result.id)
 
     # Get the top N results
     top_results = sorted_results[:n]

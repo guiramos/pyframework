@@ -42,6 +42,11 @@ def convert_utc_to_tz(utc_timestamp, target_tz='US/Eastern'):
     return utc_timestamp.astimezone(pytz.timezone(target_tz))
 
 
+def convert_local_to_utc(local_timestamp, local_tz='US/Eastern'):
+    local_timezone = pytz.timezone(local_tz)
+    local_timestamp = local_timezone.localize(local_timestamp)
+    return local_timestamp.astimezone(pytz.utc)
+
 def get_today_date():
     tz = pytz.timezone(os.environ.get('TZ'))
     return datetime.datetime.now(tz)
