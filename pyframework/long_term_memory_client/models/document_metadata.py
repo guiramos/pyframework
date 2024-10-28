@@ -1,11 +1,9 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
 import attr
-from firebase_admin.db import reference
 
 from ..models.source import Source
 from ..types import UNSET, Unset
-
 T = TypeVar("T", bound="DocumentMetadata")
 
 
