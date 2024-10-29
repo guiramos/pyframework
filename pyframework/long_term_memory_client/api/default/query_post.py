@@ -183,7 +183,9 @@ async def asyncio(
     ).parsed
 
 
-def query_long_term_memory(client, query, user_id=None, document_id=None, source_id=None, source=None, k=1) -> QueryResponse:
+def query_long_term_memory(client, query, user_id=None, document_id=None, source_id=None, source=None,
+                           reference=None,
+                           k=1) -> QueryResponse:
     criteria = f"{query}".replace("_", " ")
 
     filter_dict = {}
@@ -195,6 +197,8 @@ def query_long_term_memory(client, query, user_id=None, document_id=None, source
         filter_dict["source"] = f"{source}"
     if source_id is not None:
         filter_dict["source_id"] = f"{source_id}"
+    if reference is not None:
+        filter_dict["reference"] = f"{reference}"
 
     query_payload = {
         "queries": [
@@ -213,6 +217,7 @@ def query_long_term_memory(client, query, user_id=None, document_id=None, source
     return response
 
 
-def query_long_term_top_results(client, query, user_id=None, document_id=None, source_id=None, source=None, threshold=0.3, k=3):
-    long_term_response = query_long_term_memory(client, query, user_id, document_id, source_id, source, k)
+def query_long_term_top_results(client, query, user_id=None, document_id=None, source_id=None, source=None, reference=None,
+                                threshold=0.3, k=3):
+    long_term_response = query_long_term_memory(client, query, user_id, document_id, source_id, source, reference, k)
     return get_top_results_above_threshold(long_term_response, threshold, k)
