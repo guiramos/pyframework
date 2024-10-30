@@ -188,7 +188,7 @@ async def asyncio(
     ).parsed
 
 
-def upsert_information(client, document_id, text, source_id, created_at, author, source="chat"):
+def upsert_information(client, document_id, text, source_id, created_at, author, source="chat", reference=None):
     upsert_payload = {
         "documents": [
             {
@@ -206,6 +206,9 @@ def upsert_information(client, document_id, text, source_id, created_at, author,
     if document_id is not None and document_id != "":
         upsert_payload["documents"][0]["id"] = document_id
         upsert_payload["documents"][0]["metadata"]["document_id"] = document_id
+
+    if reference is not None:
+        upsert_payload["documents"][0]["metadata"]["reference"] = reference
 
     upsert_request = UpsertRequest.from_dict(upsert_payload)
     return sync(client=client, json_body=upsert_request)
