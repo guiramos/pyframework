@@ -94,5 +94,23 @@ uvicorn_logging_config = {
 }
 
 
+# Custom logging handler that writes to a file in a streaming manner
+class StreamToFileHandler(logging.Handler):
+    def __init__(self, filename):
+        super().__init__()
+        self.file = open(filename, 'a')
+
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            self.file.write(msg)
+            self.file.flush()
+        except Exception:
+            self.handleError(record)
+
+    def close(self):
+        if self.file:
+            self.file.close()
+        super().close()
 
 
