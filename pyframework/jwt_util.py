@@ -38,6 +38,12 @@ def add_padding(token: str) -> str:
         token += '=' * (4 - padding_needed)
     return token
 
+from firebase_admin import auth, credentials, initialize_app
+
+# Initialize the Firebase admin app
+cred = credentials.Certificate(f"./resources/gen-lang-client-0428827192-firebase-adminsdk-e1z9g-358af55143.json")
+initialize_app(cred)
+
 
 def decode_google_id_token(token):
     try:
