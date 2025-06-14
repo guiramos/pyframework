@@ -42,7 +42,7 @@ from firebase_admin import auth, credentials, initialize_app
 
 def initialize_firebase():
     # Initialize the Firebase admin app
-    cred = credentials.Certificate(f"./resources/gen-lang-client-0428827192-firebase-adminsdk-e1z9g-358af55143.json")
+    cred = credentials.Certificate(f"./resources/serviceAccountKey.json")
     initialize_app(cred)
 
 
