@@ -1,18 +1,17 @@
 import base64
+import datetime
 import io
-import json
+import os
 import re
 import textwrap
+from functools import lru_cache
 
-import regex
-
-import os
 import pytz
-import datetime
-
+import regex
+from IPython.display import Markdown
 from PIL import Image
 
-from IPython.display import Markdown
+from pyframework.file import read_text_file
 
 UNAUTHORIZED_MESSAGE = "Unauthorized: Invalid client token."
 BAD_REQUEST_MESSAGE = "Bad Request: 'ticker' and 'operation' must be present in the request body."
@@ -169,3 +168,8 @@ def encode_image_to_base64(image_path):
             return base64.b64encode(img_byte_arr.getvalue()).decode('utf-8')
     except Exception as e:
         return f"Error encoding image: {str(e)}"
+
+
+@lru_cache(maxsize=None)
+def load_prompt(file_path):
+    return read_text_file(file_path)
