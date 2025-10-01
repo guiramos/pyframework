@@ -11,4 +11,14 @@ class UnexpectedStatus(Exception):
         super().__init__(f"Unexpected status code: {status_code}")
 
 
-__all__ = ["UnexpectedStatus"]
+class APIError(Exception):
+    """Raised when an API request fails with a non-200 status code"""
+    
+    def __init__(self, status_code: int, content: bytes, message: str = None):
+        self.status_code = status_code
+        self.content = content
+        self.message = message or f"API request failed with status code: {status_code}"
+        super().__init__(self.message)
+
+
+__all__ = ["UnexpectedStatus", "APIError"]

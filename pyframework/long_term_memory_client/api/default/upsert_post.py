@@ -9,6 +9,7 @@ from ...models.http_validation_error import HTTPValidationError
 from ...models.upsert_request import UpsertRequest
 from ...models.upsert_response import UpsertResponse
 from ...types import Response
+from ...http_utils import execute_request, execute_request_async
 
 
 def _get_kwargs(
@@ -89,12 +90,12 @@ def sync_detailed(
         json_body=json_body,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
-        **kwargs,
+    return execute_request(
+        client=client,
+        kwargs=kwargs,
+        parse_response_fn=_parse_response,
+        build_response_fn=_build_response,
     )
-
-    return _build_response(client=client, response=response)
 
 
 def sync(
@@ -152,10 +153,12 @@ async def asyncio_detailed(
         json_body=json_body,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
-
-    return _build_response(client=client, response=response)
+    return await execute_request_async(
+        client=client,
+        kwargs=kwargs,
+        parse_response_fn=_parse_response,
+        build_response_fn=_build_response,
+    )
 
 
 async def asyncio(

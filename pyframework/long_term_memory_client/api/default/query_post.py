@@ -8,6 +8,7 @@ from ...client import AuthenticatedClient, Client
 from ...models import QueryRequest, HTTPValidationError, QueryResponse
 from ...models.query_response import get_top_results_above_threshold
 from ...types import Response, UNSET
+from ...http_utils import execute_request, execute_request_async, get_parsed_or_raise
 
 
 def _get_kwargs(
@@ -84,12 +85,12 @@ def sync_detailed(
         json_body=json_body,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
-        **kwargs,
+    return execute_request(
+        client=client,
+        kwargs=kwargs,
+        parse_response_fn=_parse_response,
+        build_response_fn=_build_response,
     )
-
-    return _build_response(client=client, response=response)
 
 
 def sync(
@@ -147,10 +148,12 @@ async def asyncio_detailed(
         json_body=json_body,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
-
-    return _build_response(client=client, response=response)
+    return await execute_request_async(
+        client=client,
+        kwargs=kwargs,
+        parse_response_fn=_parse_response,
+        build_response_fn=_build_response,
+    )
 
 
 async def asyncio(
@@ -213,10 +216,8 @@ def query_long_term_memory(client, query, user_id=None, document_id=None, source
     }
 
     query_request = QueryRequest.from_dict(query_payload)
-    response = sync(client=client, json_body=query_request)
-    if response is None:
-        return QueryResponse(results=[])
-    return response
+    response = sync_detailed(client=client, json_body=query_request)
+    return get_parsed_or_raise(response)
 
 
 def query_long_term_top_results(client, query, user_id=None, document_id=None, source_id=None, source=None, reference=None,
