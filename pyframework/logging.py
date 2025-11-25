@@ -30,6 +30,9 @@ def get_default_log_dir():
 log_dir = os.getenv('LOG_PATH', get_default_log_dir())
 main_app_log_path = os.path.join(log_dir, 'logs', 'app.log')
 
+# Ensure log directory exists
+os.makedirs(os.path.dirname(main_app_log_path), exist_ok=True)
+
 # logging.basicConfig(level=logging.INFO, format=log_format)
 log_max_size = 10 * 1024 * 1024  # 10 MB
 log_backup_count = 5  # keep 5 backup logs
