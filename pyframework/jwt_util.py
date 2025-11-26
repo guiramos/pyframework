@@ -41,8 +41,10 @@ def add_padding(token: str) -> str:
 from firebase_admin import auth, credentials, initialize_app
 
 def initialize_firebase():
-    # Initialize the Firebase admin app
-    cred = credentials.Certificate(f"./resources/serviceAccountKey.json")
+    # Initialize the Firebase admin app using RESOURCES_DIR env var
+    resources_dir = os.environ.get("RESOURCES_DIR", "./resources")
+    service_account_path = os.path.join(resources_dir, "serviceAccountKey.json")
+    cred = credentials.Certificate(service_account_path)
     initialize_app(cred)
 
 
