@@ -9,6 +9,11 @@ from ..logging import log_dir
 
 
 class PayloadMiddleware:
+    MAX_LOG_CHARS = 4000
+    SKIP_PATH_PREFIXES = [
+        "/api/ml_data_candles",
+    ]
+
     def __init__(self, app: ASGIApp):
         self.app = app
         self.logger = logging.getLogger('payload_logger')
@@ -55,6 +60,10 @@ class PayloadMiddleware:
         # Call the next middleware or actual handler
         await self.app(scope, receive_wrapper, send_wrapper)
 
+        path = scope.get('path', '')
+        if any(path.startswith(prefix) for prefix in self.SKIP_PATH_PREFIXES):
+            return
+
         # Log the request
         try:
             request_body = body.decode('utf-8')
@@ -63,7 +72,8 @@ class PayloadMiddleware:
         except Exception:
             request_body_str = body.decode('utf-8', errors='replace')
 
-        self.logger.info(f"{scope['method']} {scope['path']} {request_body_str}")
+        request_body_str = self._truncate(request_body_str)
+        self.logger.info(f"{scope['method']} {path} {request_body_str}")
 
         # Log the response
         try:
@@ -73,4 +83,10 @@ class PayloadMiddleware:
         except Exception:
             response_body_str = response_body.decode('utf-8', errors='replace')
 
+        response_body_str = self._truncate(response_body_str)
         self.logger.info(f"response: {status_code} {response_body_str}")
+
+    def _truncate(self, text: str) -> str:
+        if len(text) > self.MAX_LOG_CHARS:
+            return text[: self.MAX_LOG_CHARS] + "...[truncated]"
+        return text
