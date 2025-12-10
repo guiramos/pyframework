@@ -69,6 +69,29 @@ def date_time_formatted(date_time=None):
     return date_time.strftime('%Y-%m-%dT%H:%M:%S')
 
 
+def iso_ts(value):
+    """
+    Convert a datetime value to ISO format string.
+
+    Args:
+        value: A datetime object, pandas Timestamp, or None
+
+    Returns:
+        ISO formatted string or None if value is None or conversion fails
+    """
+    if value is None:
+        return None
+    try:
+        # Handle pandas Timestamp and datetime objects
+        if hasattr(value, 'isoformat'):
+            return value.isoformat()
+        # Try pandas conversion as fallback
+        import pandas as pd
+        return pd.to_datetime(value).isoformat()
+    except Exception:
+        return None
+
+
 def concatenate_contents_from_context(list_of_objects, start_index):
     return " ".join([item["content"] for item in list_of_objects[start_index:]])
 
